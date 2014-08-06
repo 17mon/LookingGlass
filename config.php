@@ -10,7 +10,7 @@ return array(
         'title' => 'LookingGlass', //站点Title名称
         'location' => '中国北京', //站点服务器机房位置
       //  'ipv4' => '0.0.0.0', // 配置可选
-      //  'ipv6' => '0.0.0.0', // 配置可选
+      //  'ipv6' => '2402:4e00::11', // 配置可选
         'speedtest' => array( // 下载速度测试 配置可选
             '50MB'  => 'http://example.com/50MB.test',
             '150MB' => 'http://example.com/150MB.test',
