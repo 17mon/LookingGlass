@@ -118,8 +118,9 @@
                             <thead>
                             <th>跳数</th>
                             <th>IP</th>
-                            <th>Host</th>
-                            <th>Time</th>
+                            <th>主机名</th>
+                            <th>地区</th>
+                            <th>时间</th>
                             </thead>
                             <tbody class="data">
 
@@ -177,10 +178,11 @@ $(function(){
         if (json.length > 1) {
             hops++;
             var tds = [];
-            var ips = [], hosts = [], times = [], area = '';
+            var ips = [], hosts = [], times = [], area = '', areas = [];
             for (var i = 0; i < json.length; i++) {
                 area = json[i].area ? '（'+ json[i].area +'）' : '';
-                ips.push(json[i].ip + area);
+                areas.push(json[i].area);
+                ips.push(json[i].ip);
             }
             for (var i = 0; i < json.length; i++) {
                 hosts.push(json[i].host);
@@ -191,6 +193,7 @@ $(function(){
             tds.push('<td>'+ hops + '</td>');
             tds.push('<td>'+ ips.join('<br/>') + '</td>');
             tds.push('<td>'+ hosts.join('<br/>') + '</td>');
+            tds.push('<td>'+ areas.join('<br/>') + '</td>');
             tds.push('<td>'+ times.join('<br/>') + '</td>');
 
             table.find('.data').append($('<tr>' + tds.join() + '</tr>'));
@@ -201,8 +204,9 @@ $(function(){
                 var tds = [];
                 var area = obj.area.length > 0 ? '（' + obj.area + '）' : '';
                 tds.push('<td>'+ hops + '</td>');
-                tds.push('<td>'+ obj.ip + area + '</td>');
+                tds.push('<td>'+ obj.ip + '</td>');
                 tds.push('<td>'+ obj.host + '</td>');
+                tds.push('<td>'+ obj.area + '</td>');
                 tds.push('<td>'+ obj.time + '</td>');
 
                 table.find('.data').append($('<tr>' + tds.join() + '</tr>'));
@@ -221,6 +225,9 @@ $(function(){
         $('#console pre').hide().html('');
         $('#html table .data').html('');
         $('#html table').hide();
+
+        $('#trace_html .data').html('');
+        $('#trace_console pre').html('');
 
         $('#loading').show();
     };
