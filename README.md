@@ -12,9 +12,11 @@ LookingGlass 在维基百科上的解释为“Looking Glass servers are computer
 
 **演示地址：**
 
-[http://tokyo.lg.17mon.cn/] (日本东京)
-[http://fremont.lg.17mon.cn/] (美国美国费利蒙)
-[http://moscow.lg.17mon.cn/] (俄罗斯莫斯科)
+1、[http://tokyo.lg.17mon.cn](http://tokyo.lg.17mon.cn "日本东京") 日本东京
+
+2、[http://fremont.lg.17mon.cn](http://fremont.lg.17mon.cn "美国美国费利蒙") 美国美国费利蒙
+
+3、[http://moscow.lg.17mon.cn](http://moscow.lg.17mon.cn "俄罗斯莫斯科") 俄罗斯莫斯科
 
 **有几点说明：**
 
