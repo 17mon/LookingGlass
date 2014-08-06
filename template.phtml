@@ -36,7 +36,7 @@
             <div class="panel-heading">
                 当前服务器状态
                 <?php if (!empty($nodes)):?>
-                <select style="float: right" onchange="if(this.value.indexOf('http')>-1){location.href=this.value}">
+                <select style="float: right" onchange="if(this.value.indexOf('http')>-1){window.open(this.value)}">
                     <option value="">其它服务器</option>
                     <?php foreach ($nodes AS $value):?>
                     <option value="<?php App::h($value['link'])?>"><?php App::h($value['name'])?></option>
