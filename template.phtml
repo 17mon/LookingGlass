@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title><?php App::h($site['title']);?></title>
+    <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/3.1.1/css/bootstrap.min.css"/>
+    <style>
+        #header, #footer {width:1000px;}
+        .current {
+            margin-top: 10px;
+        }
+        #console pre, #html table {display: none;}
+        dl {margin: 0;}
+        dl dd {margin-left: 20px;}
+        table td, table th {text-align:center;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="header">
+        <div class="logo">
+            <a href="<?php App::h($site['home']['link'])?>" target="_blank">
+                <?php if (empty($site['home']['logo'])):?>
+                    <?php App::h($site['home']['name'])?>
+                <?php else:?>
+                    <img src="<?php App::h($site['home']['logo'])?>">
+                <?php endif;?>
+            </a>
+        </div>
+        <div class="nav">
+
+        </div>
+    </div>
+    <div class="current">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                当前服务器状态
+                <?php if (!empty($nodes)):?>
+                <select style="float: right" onchange="if(this.value.indexOf('http')>-1){location.href=this.value}">
+                    <option value="">其它服务器</option>
+                    <?php foreach ($nodes AS $value):?>
+                    <option value="<?php App::h($value['link'])?>"><?php App::h($value['name'])?></option>
+                    <?php endforeach;?>
+                </select>
+                <?php endif;?>
+            </div>
+            <div class="panel-body">
+                <dl>
+                    <dt>服务位置</dt>
+                    <dd><?php App::h($site['location'])?></dd>
+                </dl>
+                <?php if (!empty($site['ipv4'])):?>
+                <dl>
+                    <dt>IPv4</dt>
+                    <dd><?php App::h($site['ipv4'])?></dd>
+                </dl>
+                <?php endif;?>
+                <?php if (!empty($site['ipv6'])):?>
+                <dl>
+                    <dt>IPv6</dt>
+                    <dd><?php App::h($site['ipv6'])?></dd>
+                </dl>
+                <?php endif;?>
+                <?php if (!empty($site['speedtest'])):?>
+                <dl>
+                    <dt>下载速度测试</dt>
+                    <dd>
+                        <?php foreach ($site['speedtest'] as $key => $value):?>
+                        <a href="<?php App::h($value)?>"><?php App::h($key)?></a>
+                        <?php endforeach;?>
+                    </dd>
+                </dl>
+                <?php endif;?>
+                <dl>
+                    <dt>您的IP</dt>
+                    <dd><?php App::h(isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '')?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="control">
+        <div class="panel panel-info">
+            <div class="panel-heading">操作面板</div>
+            <div class="panel-body">
+                <iframe name="frame" id="frame" src="" style="display: none"></iframe>
+                <form  class="form-inline" target="frame" method="post" action="/execute">
+                    <div class="form-group">
+                    <input type="text" id="host" name="host" value="" class="form-control"/>
+                        </div>
+                    <div class="form-group">
+                    <select id="J_cmd" name="cmd" class="form-control">
+                        <?php foreach ($site['commands'] AS $key => $value):?>
+                        <option value="<?php App::h($key)?>"><?php App::h($key)?></option>
+                        <?php endforeach;?>
+                    </select>
+                        </div>
+                        <div class="form-group">
+                    <button type="button" id="J_button" class="btn btn-primary">执行</button> <img id="loading" style="display: none" src="http://s.qdcdn.com/loveapp/dpt/theme/images/spinner.gif">
+                            </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="output">
+    <?php foreach ($site['commands'] AS $key => $value):?>
+    <div id="J_<?php App::h($key)?>" class="panel panel-success">
+        <div class="panel-heading"><?php App::h(ucfirst($key))?>执行结果</div>
+        <div class="panel-body">
+            <?php if (strpos($key, 'trace') !== FALSE):?>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#trace_console" data-toggle="tab">命令行</a></li>
+                    <li><a href="#trace_html" data-toggle="tab">格式化</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="trace_console"><pre></pre></div>
+                    <div class="tab-pane" id="trace_html">
+                        <table class="table table-bordered out_traceroute">
+                            <thead>
+                            <th>跳数</th>
+                            <th>IP</th>
+                            <th>Host</th>
+                            <th>Time</th>
+                            </thead>
+                            <tbody class="data">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <?php else:?>
+             <pre></pre>
+            <?php endif;?>
+        </div>
+    </div>
+    <?php endforeach;?>
+    </div>
+
+    <div id="footer">
+        <div style="text-align: center">Powered by <a href="http://www.17mon.cn/">17mon.cn</a></div>
+    </div>
+</div>
+<script src="//cdn.staticfile.org/jquery/1.8.3/jquery.min.js"></script>
+<script src="//cdn.staticfile.org/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script>
+$(function(){
+    $('#output>div').hide();
+    $('#J_button').on('click', function(){
+        var cmd = $('#J_cmd').val(),
+            output = $('#J_output').val();
+        var t = $('#' + output);
+            t.find('div').hide();
+            t.find('.out_' + cmd).show();
+        var host = $('#host').val();
+        if (host.length < 3) {
+            alert('请正确输入IP或域名');
+            return;
+        }
+        update_start();
+        this.form.submit();
+    });
+
+    window.update_view = function(data, json){
+        var cmd = $('#J_cmd').val(), ele = $('#J_' + cmd), pre = ele.find('pre'), txt = pre.text();
+        ele.show();
+        pre.html(txt + data + "\n");
+        if (cmd.indexOf('trace') > -1) {
+            traceroute_view(json);
+        }
+        return;
+    };
+
+    var hops = 0;
+    window.traceroute_view = function(json){
+        console.log(json);
+        var table = $('#trace_html').find('table');
+        table.show();
+        if (json.length > 1) {
+            hops++;
+            var tds = [];
+            var ips = [], hosts = [], times = [], area = '';
+            for (var i = 0; i < json.length; i++) {
+                area = json[i].area ? '（'+ json[i].area +'）' : '';
+                ips.push(json[i].ip + area);
+            }
+            for (var i = 0; i < json.length; i++) {
+                hosts.push(json[i].host);
+            }
+            for (var i = 0; i < json.length; i++) {
+                times.push(json[i].time);
+            }
+            tds.push('<td>'+ hops + '</td>');
+            tds.push('<td>'+ ips.join('<br/>') + '</td>');
+            tds.push('<td>'+ hosts.join('<br/>') + '</td>');
+            tds.push('<td>'+ times.join('<br/>') + '</td>');
+
+            table.find('.data').append($('<tr>' + tds.join() + '</tr>'));
+        } else if (json.length == 1) {
+            hops++;
+
+            $.each(json, function(k, obj){
+                var tds = [];
+                var area = obj.area.length > 0 ? '（' + obj.area + '）' : '';
+                tds.push('<td>'+ hops + '</td>');
+                tds.push('<td>'+ obj.ip + area + '</td>');
+                tds.push('<td>'+ obj.host + '</td>');
+                tds.push('<td>'+ obj.time + '</td>');
+
+                table.find('.data').append($('<tr>' + tds.join() + '</tr>'));
+            });
+        }
+    };
+
+    window.req_complete = function(){
+        $('#loading').hide();
+    };
+
+    window.update_start = function(){
+        hops =0;
+        $('#output>div').hide();
+
+        $('#console pre').hide().html('');
+        $('#html table .data').html('');
+        $('#html table').hide();
+
+        $('#loading').show();
+    };
+});
+</script>
+</body>
+</html>
