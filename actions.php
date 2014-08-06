@@ -8,8 +8,31 @@ class actions
 
         $config = App::getConfig();
 
-        $rateLimit = $config['site']['rateLimit'];
+        self::checkRateLimit($config['site']['rateLimit']);
 
+        $commands = $config['site']['commands'];
+
+        $param = $_GET + $_POST;
+        $host = isset($param['host']) ? $param['host'] : '';
+        $cmd  = isset($param['cmd']) ? $param['cmd'] : '';
+
+        $host = gethostbyname($host);
+
+        if (isset($commands[$cmd]))
+        {
+            call_user_func(array(__CLASS__, $cmd), $host, $commands[$cmd]);
+
+            echo '<script>parent.req_complete()</script>';
+        }
+        else
+        {
+            echo "<script>parent.alert('无效命令');</script>";
+            exit;
+        }
+    }
+
+    private static function checkRateLimit($rateLimit)
+    {
         if (isset($rateLimit['enable']) && $rateLimit['enable'])
         {
             $option = [
@@ -31,21 +54,6 @@ class actions
             {
                 exit('<script>parent.alert("操作太频繁了")</script>');
             }
-        }
-
-        $commands = $config['site']['commands'];
-
-        $param = $_GET + $_POST;
-        $host = isset($param['host']) ? $param['host'] : '';
-        $cmd  = isset($param['cmd']) ? $param['cmd'] : '';
-
-        $host = gethostbyname($host);
-
-        if (isset($commands[$cmd]))
-        {
-            call_user_func(array(__CLASS__, $cmd), $host, $commands[$cmd]);
-
-            echo '<script>parent.req_complete()</script>';
         }
     }
 
@@ -97,7 +105,6 @@ class actions
         flush();
 
         command\traceroute::execute($args, function($line, $json) {
-
             echo '<script>parent.update_view("' . trim($line) . '", ' . json_encode($json) . ')</script>';
             ob_flush();
             flush();
