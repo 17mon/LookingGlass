@@ -85,7 +85,7 @@ class Application
             }
 
             return require $file;
-        });
+        }, true, true);
     }
 
     protected static $classMap = array(
