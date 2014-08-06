@@ -12,7 +12,7 @@ class traceroute implements \CommandInterface
             {
                 $ret[] = $line;
             }
-            else
+            elseif (strlen($line) > 0)
             {
                 $callback($line, self::parse($line));
             }
