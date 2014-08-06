@@ -8,7 +8,7 @@ LookingGlass 在维基百科上的解释为“Looking Glass servers are computer
 
 我看过几个开源代码，我觉得还有改进余地，比如结果的逐行输出，比如 traceroute 的格式化输出，这个在我做 17MON 的经历中，感觉还是非常有用的。
 
-所以我也希望基于 17MON 的经验，做一个 Looking GLass 服务出来，希望大家可以更好的来使用这个服务。
+所以我也希望基于 17MON 的经验，做一个 Looking Glass 服务出来，希望大家可以更好的来使用这个服务。
 
 **有几点说明：**
 
