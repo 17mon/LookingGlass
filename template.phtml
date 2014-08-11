@@ -172,7 +172,6 @@ $(function(){
 
     var hops = 0;
     window.traceroute_view = function(json){
-        console.log(json);
         var table = $('#trace_html').find('table');
         table.show();
         if (json.length > 1) {
