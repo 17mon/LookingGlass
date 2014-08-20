@@ -19,17 +19,15 @@ class actions
         if (stripos($host, 'localhost') !== FALSE)
         {
             echo "<script>parent.alert('请输入正确的IP地址或域名');</script>";
+            echo '<script>parent.req_complete()</script>';
             exit;
         }
+
         $ip = gethostbyname($host);
-        if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE)
+        if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE || $ip == '127.0.0.1')
         {
             echo "<script>parent.alert('请输入正确的IP地址或域名');</script>";
-            exit;
-        }
-        if ($ip == '127.0.0.1')
-        {
-            echo "<script>parent.alert('请输入正确的IP地址或域名');</script>";
+            echo '<script>parent.req_complete()</script>';
             exit;
         }
 
@@ -42,6 +40,7 @@ class actions
         else
         {
             echo "<script>parent.alert('无效命令');</script>";
+            echo '<script>parent.req_complete()</script>';
             exit;
         }
     }
