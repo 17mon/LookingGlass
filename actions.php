@@ -16,11 +16,26 @@ class actions
         $host = isset($param['host']) ? $param['host'] : '';
         $cmd  = isset($param['cmd']) ? $param['cmd'] : '';
 
-        $host = gethostbyname($host);
+        if (stripos($host, 'localhost') !== FALSE)
+        {
+            echo "<script>parent.alert('请输入正确的IP地址或域名');</script>";
+            exit;
+        }
+        $ip = gethostbyname($host);
+        if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE)
+        {
+            echo "<script>parent.alert('请输入正确的IP地址或域名');</script>";
+            exit;
+        }
+        if ($ip == '127.0.0.1')
+        {
+            echo "<script>parent.alert('请输入正确的IP地址或域名');</script>";
+            exit;
+        }
 
         if (isset($commands[$cmd]))
         {
-            call_user_func(array(__CLASS__, $cmd), $host, $commands[$cmd]);
+            call_user_func(array(__CLASS__, $cmd), $ip, $commands[$cmd]);
 
             echo '<script>parent.req_complete()</script>';
         }
