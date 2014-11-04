@@ -22,6 +22,8 @@ LookingGlass 在维基百科上的解释为“Looking Glass servers are computer
 
 3、[http://moscow.lg.17mon.cn](http://moscow.lg.17mon.cn "俄罗斯莫斯科") 俄罗斯莫斯科
 
+4、[http://beijing.lg.17mon.cn](http://beijing.lg.17mon.cn "中国北京") 中国北京(鹏博士机房)
+
 **有几点说明：**
 
 1、配置方式，请见 config.php，另外请做好该服务器的相关安全工作。
