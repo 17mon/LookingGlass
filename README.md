@@ -6,7 +6,7 @@ LookingGlass 在维基百科上的解释为“Looking Glass servers are computer
 
 但是，在国内，几乎没有看到有架设此类服务的，无论公司规模与否。
 
-我们做不了路由器级别的 Looking Glass，但是做服务器方式的 Looking Glass，总可以的吧？
+我们做不了路由器级别的 Looking Glass，但是做服务器方式的 Looking Glass，总是可以的吧？
 
 我看过国外的几个开源实现，我觉得还有改进余地，比如结果的逐行输出，比如 traceroute 的格式化输出，这个在我们做 17MON 的经历中，感觉还是非常有用的。
 
@@ -26,9 +26,9 @@ LookingGlass 在维基百科上的解释为“Looking Glass servers are computer
 
 **有几点说明：**
 
-1、配置方式，请见 config.php，另外请做好该服务器的相关安全工作。
+1、配置方式，请见 config.php，另外请做好该服务器的相关安全加固工作，还有规划好带宽情况。
 
-2、这里面包含的 IP 库基于 17MON 的公开版，限制请见网站。您需要定期自行更新，目前是每双月初更新。
+2、这里面包含的 IP 库基于 17MON 的公开免费版，限制请见网站。您需要定期自行更新，目前是每双月初更新。
 
 3、结果的逐行输出，需要 webserver 支持，建议使用 Nginx 1.5.6 版本以上，即可支持逐行输出，设置例子请见 nginx.conf。
 
