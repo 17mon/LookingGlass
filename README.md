@@ -26,7 +26,7 @@ LookingGlass 在维基百科上的解释为“Looking Glass servers are computer
 
 **有几点说明：**
 
-1、配置方式，请见 config.php，另外请做好该服务器的相关安全加固工作，还有规划好带宽情况。
+1、要求 PHP 5.4+。具体配置方式，请见 config.php，另外请做好该服务器的相关安全加固工作，还有规划好带宽情况。
 
 2、这里面包含的 IP 库基于 17MON 的公开免费版，限制请见网站。您需要定期自行更新，目前是每双月初更新。
 
@@ -34,6 +34,6 @@ LookingGlass 在维基百科上的解释为“Looking Glass servers are computer
 
 **相关链接：**
 
-1、[IP地址库下载](http://tool.17mon.cn/ipdb.html "IP 归属地数据库")
+1、[IP地址库下载](http://www.ipip.net/ipdb.html "IPIP.NET IP 归属地数据库")
 
-2、[17MON网络工具集](http://tool.17mon.cn/ "17MON网络工具集") 目前由我和同事业余在维护的，全球有 130 多个监测点可供使用，tracert 功能尤其强大和准确，是你 ping 和 tracert 的好帮手。
+2、[IPIP.NET 网络工具集](https://www.ipip.net/traceroute.php "IPIP.NET 网络工具集") 目前由我和同事业余在维护的，全球有 200 多个监测点可供使用，tracert 功能尤其强大和准确，是你 ping 和 tracert 的好帮手。
