@@ -23,16 +23,32 @@ class actions
             exit;
         }
 
-        $ip = gethostbyname($host);
-        if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE || $ip == '127.0.0.1')
-        {
-            echo "<script>parent.alert('请输入正确的IP地址或域名');</script>";
-            echo '<script>parent.req_complete()</script>';
-            exit;
-        }
-
         if (isset($commands[$cmd]))
         {
+            if ($cmd == "ping6" || $cmd == "traceroute6")
+            {
+                $result = dns_get_record($host, DNS_AAAA);
+                if (!empty($result))
+                {
+                    $ip = $result[0]["ipv6"];
+                }
+                else
+                {
+                    $ip = "";
+                }
+            }
+            else
+            {
+                $ip = gethostbyname($host);
+            }
+
+            if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE || $ip == '127.0.0.1')
+            {
+                echo "<script>parent.alert('请输入正确的IP地址或域名$ip');</script>";
+                echo '<script>parent.req_complete()</script>';
+                exit;
+            }
+
             call_user_func(array(__CLASS__, $cmd), $ip, $commands[$cmd]);
 
             echo '<script>parent.req_complete()</script>';
@@ -138,6 +154,24 @@ class actions
 
         command\ping::execute($args, function($line){
             echo '<script>parent.update_view("' . trim($line) . '")</script>';
+            ob_flush();
+            flush();
+        });
+    }
+
+    protected static function traceroute6($host, $cmd)
+    {
+        $args = [
+            'cmd' => $cmd,
+            'ip'  => $host,
+        ];
+
+        echo '<script>parent.update_start()</script>';
+        ob_flush();
+        flush();
+
+        command\traceroute::execute($args, function($line, $json) {
+            echo '<script>parent.update_view("' . trim($line) . '", ' . json_encode($json) . ')</script>';
             ob_flush();
             flush();
         });
